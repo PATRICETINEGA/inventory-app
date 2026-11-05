@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import AddItem from '@/components/AddItem'
+import DeleteItemButton from '@/components/DeleteItemButton'
 export default async function Dash() {
   const s = await getSession()
   if (!s) redirect('/login')
@@ -22,9 +23,12 @@ export default async function Dash() {
       <AddItem />
       <div className="space-y-2">
         {items.map((i: any) => (
-          <div key={i.id} className="bg-white p-3 rounded shadow flex justify-between text-sm">
+          <div key={i.id} className="bg-white p-3 rounded shadow flex justify-between items-center text-sm">
             <div><span className="font-medium">{i.name}</span> {i.category && <span className="text-gray-500">· {i.category}</span>}</div>
-            <span>{i.quantity}</span>
+            <div className="flex items-center gap-3">
+              <span>{i.quantity}</span>
+              <DeleteItemButton id={i.id} />
+            </div>
           </div>
         ))}
         {items.length === 0 && <p className="text-gray-500">No items yet</p>}
